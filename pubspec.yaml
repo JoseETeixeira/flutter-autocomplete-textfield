@@ -1,7 +1,7 @@
 name: autocomplete_textfield
-description: A simple and versatile autocomplete text field for flutter, supporting multiple datatypes.
-version: 1.7.4
-author: Felix McCuaig <felixmccuaigdev@gmail.com>
+description: A simple and versatile autocomplete text field for flutter, supporting multiple datatypes, now featuring listsview .
+version: 1.7.5
+author: Felix McCuaig <felixmccuaigdev@gmail.com> || José Eduardo Teixeira <joseeduardot@developmentparadise.com>
 homepage: https://github.com/felixlucien/flutter-autocomplete-textfield
 
 environment:

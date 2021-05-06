@@ -253,9 +253,15 @@ class AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField> {
           if (textChanged != null) {
             textChanged!(newText);
           }
+          setState(() {
+            listHeight = 0;
+          });
         },
         onTap: () {
           updateOverlay(currentText);
+          setState(() {
+            listHeight = 0;
+          });
         },
         onSubmitted: (submittedText) =>
             triggerSubmitted(submittedText: submittedText),
@@ -308,42 +314,50 @@ class AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField> {
                 link: _layerLink,
                 showWhenUnlinked: false,
                 offset: Offset(0.0, height),
-                child: new SizedBox(
-                    width: width,
-                    child: new Card(
-                        child: Container(
-                            height: listHeight,
-                            child: new ListView(
-                              children: filteredSuggestions.map((suggestion) {
-                                return new Row(children: [
-                                  new Expanded(
-                                      child: new InkWell(
-                                          child:
-                                              itemBuilder!(context, suggestion),
-                                          onTap: () {
-                                            setState(() {
-                                              if (submitOnSuggestionTap) {
-                                                String newText =
-                                                    suggestion.toString();
-                                                textField!.controller!.text =
-                                                    newText;
-                                                textField!.focusNode!.unfocus();
-                                                itemSubmitted!(suggestion);
-                                                if (clearOnSubmit) {
-                                                  clear();
-                                                }
-                                              } else {
-                                                String newText =
-                                                    suggestion.toString();
-                                                textField!.controller!.text =
-                                                    newText;
-                                                textChanged!(newText);
-                                              }
-                                            });
-                                          }))
-                                ]);
-                              }).toList(),
-                            ))))));
+                child: filteredSuggestions.length > 0
+                    ? new SizedBox(
+                        width: width,
+                        child: new Card(
+                            child: Container(
+                                height: listHeight,
+                                child: new ListView(
+                                  children:
+                                      filteredSuggestions.map((suggestion) {
+                                    return new Row(children: [
+                                      new Expanded(
+                                          child: new InkWell(
+                                              child: itemBuilder!(
+                                                  context, suggestion),
+                                              onTap: () {
+                                                setState(() {
+                                                  if (submitOnSuggestionTap) {
+                                                    String newText =
+                                                        suggestion.toString();
+                                                    textField!.controller!
+                                                        .text = newText;
+                                                    textField!.focusNode!
+                                                        .unfocus();
+                                                    itemSubmitted!(suggestion);
+                                                    if (clearOnSubmit) {
+                                                      clear();
+                                                    }
+                                                    listHeight = 0;
+                                                  } else {
+                                                    String newText =
+                                                        suggestion.toString();
+                                                    textField!.controller!
+                                                        .text = newText;
+                                                    textChanged!(newText);
+                                                    listHeight = 0;
+                                                  }
+                                                });
+                                              }))
+                                    ]);
+                                  }).toList(),
+                                ))))
+                    : new SizedBox(
+                        height: 0,
+                      )));
       });
       Overlay.of(context)!.insert(listSuggestionsEntry!);
     }
