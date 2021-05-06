@@ -14,6 +14,7 @@ typedef StringCallback(String data);
 
 class AutoCompleteTextField<T> extends StatefulWidget {
   final List<T> suggestions;
+  final double listHeight;
   final Filter<T>? itemFilter;
   final Comparator<T>? itemSorter;
   final StringCallback? textChanged, textSubmitted;
@@ -40,7 +41,8 @@ class AutoCompleteTextField<T> extends StatefulWidget {
       required this.suggestions, //Suggestions that will be displayed
       required this.itemBuilder, //Callback to build each item, return a Widget
       required this.itemSorter, //Callback to sort items in the form (a of type <T>, b of type <T>)
-      required this.itemFilter, //Callback to filter item: return true or false depending on input text
+      required this.itemFilter,
+      required this.listHeight, //Callback to filter item: return true or false depending on input text
       this.inputFormatters,
       this.style,
       this.decoration: const InputDecoration(),
@@ -96,6 +98,7 @@ class AutoCompleteTextField<T> extends StatefulWidget {
       itemSorter,
       itemFilter,
       suggestionsAmount,
+      listHeight,
       submitOnSuggestionTap,
       clearOnSubmit,
       minLength,
@@ -123,6 +126,7 @@ class AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField> {
   late List<T> filteredSuggestions;
   Filter<T>? itemFilter;
   int suggestionsAmount;
+  double listHeight;
   int minLength;
   bool submitOnSuggestionTap, clearOnSubmit;
   TextEditingController? controller;
@@ -147,6 +151,7 @@ class AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField> {
       this.itemSorter,
       this.itemFilter,
       this.suggestionsAmount,
+      this.listHeight,
       this.submitOnSuggestionTap,
       this.clearOnSubmit,
       this.minLength,
@@ -307,7 +312,7 @@ class AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField> {
                     width: width,
                     child: new Card(
                         child: Container(
-                            height: MediaQuery.of(context).size.height * 0.05,
+                            height: listHeight,
                             child: new ListView(
                               children: filteredSuggestions.map((suggestion) {
                                 return new Row(children: [
@@ -386,6 +391,8 @@ class AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField> {
 class SimpleAutoCompleteTextField extends AutoCompleteTextField<String> {
   final StringCallback? textChanged, textSubmitted;
   final int minLength;
+  final double listHeight;
+
   final ValueSetter<bool>? onFocusChanged;
   final TextEditingController? controller;
   final FocusNode? focusNode;
@@ -403,6 +410,7 @@ class SimpleAutoCompleteTextField extends AutoCompleteTextField<String> {
       required GlobalKey<AutoCompleteTextFieldState<String>> key,
       required List<String> suggestions,
       int suggestionsAmount: 5,
+      this.listHeight = 5.0,
       bool submitOnSuggestionTap: true,
       bool clearOnSubmit: true,
       TextInputAction textInputAction: TextInputAction.done,
@@ -420,6 +428,7 @@ class SimpleAutoCompleteTextField extends AutoCompleteTextField<String> {
             itemSorter: null,
             itemFilter: null,
             suggestionsAmount: suggestionsAmount,
+            listHeight: listHeight,
             submitOnSuggestionTap: submitOnSuggestionTap,
             clearOnSubmit: clearOnSubmit,
             textInputAction: textInputAction,
@@ -439,6 +448,7 @@ class SimpleAutoCompleteTextField extends AutoCompleteTextField<String> {
         return item.toLowerCase().startsWith(query.toLowerCase());
       },
           suggestionsAmount,
+          listHeight,
           submitOnSuggestionTap,
           clearOnSubmit,
           minLength,
