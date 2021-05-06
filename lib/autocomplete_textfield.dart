@@ -306,32 +306,39 @@ class AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField> {
                 child: new SizedBox(
                     width: width,
                     child: new Card(
-                        child: new ListView(
-                      children: filteredSuggestions.map((suggestion) {
-                        return new Row(children: [
-                          new Expanded(
-                              child: new InkWell(
-                                  child: itemBuilder!(context, suggestion),
-                                  onTap: () {
-                                    setState(() {
-                                      if (submitOnSuggestionTap) {
-                                        String newText = suggestion.toString();
-                                        textField!.controller!.text = newText;
-                                        textField!.focusNode!.unfocus();
-                                        itemSubmitted!(suggestion);
-                                        if (clearOnSubmit) {
-                                          clear();
-                                        }
-                                      } else {
-                                        String newText = suggestion.toString();
-                                        textField!.controller!.text = newText;
-                                        textChanged!(newText);
-                                      }
-                                    });
-                                  }))
-                        ]);
-                      }).toList(),
-                    )))));
+                        child: Container(
+                            height: MediaQuery.of(context).size.height * 0.05,
+                            child: new ListView(
+                              children: filteredSuggestions.map((suggestion) {
+                                return new Row(children: [
+                                  new Expanded(
+                                      child: new InkWell(
+                                          child:
+                                              itemBuilder!(context, suggestion),
+                                          onTap: () {
+                                            setState(() {
+                                              if (submitOnSuggestionTap) {
+                                                String newText =
+                                                    suggestion.toString();
+                                                textField!.controller!.text =
+                                                    newText;
+                                                textField!.focusNode!.unfocus();
+                                                itemSubmitted!(suggestion);
+                                                if (clearOnSubmit) {
+                                                  clear();
+                                                }
+                                              } else {
+                                                String newText =
+                                                    suggestion.toString();
+                                                textField!.controller!.text =
+                                                    newText;
+                                                textChanged!(newText);
+                                              }
+                                            });
+                                          }))
+                                ]);
+                              }).toList(),
+                            ))))));
       });
       Overlay.of(context)!.insert(listSuggestionsEntry!);
     }
