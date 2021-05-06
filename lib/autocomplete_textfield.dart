@@ -306,7 +306,7 @@ class AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField> {
                 child: new SizedBox(
                     width: width,
                     child: new Card(
-                        child: new Column(
+                        child: new ListView(
                       children: filteredSuggestions.map((suggestion) {
                         return new Row(children: [
                           new Expanded(
